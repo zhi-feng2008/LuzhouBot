@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="EleCho.GoCqHttpSdk" Version="1.2.2" />
+    <PackageReference Include="SaladimQBot.GoCqHttp" Version="0.5.3" />
   </ItemGroup>
 
 </Project>

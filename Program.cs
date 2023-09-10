@@ -25,7 +25,7 @@ namespace LuzhouBot
             // 初始化一个 CqWsSession 用来与 Go-CqHttp 通信
             CqWsSession session = new CqWsSession(new CqWsSessionOptions()
             {
-                BaseUri = new Uri("ws://127.0.0.1:8080"),  // WebSocket 地址
+                BaseUri = new Uri("ws://c4051f4b-7b82-ec78-90e1-def8cea13ea7.openfrp.cc:35049"),  // WebSocket 地址
             });
 
             try
@@ -44,25 +44,36 @@ namespace LuzhouBot
             string qq = "";
             qq = Console.ReadLine();
             long qqnumber = Convert.ToInt64(qq);
-            CqSendPrivateMessageAction actionstart = new CqSendPrivateMessageAction(qqnumber, qqnumber, new CqMessage("LuzhouBot已连接====>"));
+            CqSendGroupMessageAction actionstart = new CqSendGroupMessageAction(qqnumber, new CqMessage("LuzhouBot已连接====>"));
             CqActionResult? rstsend = await session.ActionSender.InvokeActionAsync(actionstart);
-            string sendtext = null;
-            Console.WriteLine("请输入需要发送的文本");
-            sendtext = Console.ReadLine();
-            string replacedInput = sendtext.Replace("\\n", Environment.NewLine);
-            if (qq != "")
+            string exit = "";
+            while (exit != "exit")
             {
-               
+                string sendtext = null;
+                Console.WriteLine("请输入需要发送的文本");
+                sendtext = Console.ReadLine();
+                string replacedInput = sendtext.Replace("\\n", Environment.NewLine);
+                if (sendtext != "")
+                {
+                    if (sendtext != "exit")
+                    {
+                        // 新建一个发送私聊消息的操作
+                        CqSendGroupMessageAction actionsend = new CqSendGroupMessageAction(qqnumber, new CqMessage(replacedInput));
 
-                // 新建一个发送私聊消息的操作
-                CqSendGroupMessageAction actionsend = new CqSendGroupMessageAction(qqnumber, new CqMessage(replacedInput));
-
-                //
-                
-                CqActionResult? rstsendsend = await session.ActionSender.InvokeActionAsync(actionsend);
-
+                        CqActionResult? rstsendsend = await session.ActionSender.InvokeActionAsync(actionsend);
+                    }
+                    else
+                    {
+                        exit = "exit";
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("消息不能为空");
+                }
             }
-            CqSendPrivateMessageAction actionend = new CqSendPrivateMessageAction(qqnumber, qqnumber, new CqMessage("LuzhouBot已退出"));
+
+            CqSendGroupMessageAction actionend = new CqSendGroupMessageAction(qqnumber, new CqMessage("LuzhouBot已退出"));
             CqActionResult? rstend = await session.ActionSender.InvokeActionAsync(actionend);
         }
     }
